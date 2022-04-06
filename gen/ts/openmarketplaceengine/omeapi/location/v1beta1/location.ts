@@ -535,7 +535,6 @@ export const QueryLocationResponse = {
   },
 };
 
-/** Serves all location-related requests. */
 export const LocationServiceDefinition = {
   name: "LocationService",
   fullName: "omeapi.location.v1beta1.LocationService",
