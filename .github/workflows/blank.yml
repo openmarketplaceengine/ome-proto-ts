@@ -23,7 +23,7 @@ jobs:
     # The type of runner that the job will run on
     runs-on: ubuntu-latest
 
-    if: "!contains(github.event.head_commit.message, 'Auto-generated code')"
+    if: ${{ github.ref == 'refs/heads/main' && !contains(github.event.head_commit.message, 'Auto-generated code') }}
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
