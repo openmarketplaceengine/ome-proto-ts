@@ -5,33 +5,33 @@ import { Timestamp } from "../../../../google/protobuf/timestamp";
 
 export const protobufPackage = "omeapi.tollgate.v1beta1";
 
-export interface GetTollgateRequest {
+export interface QueryOneRequest {
   tollgateId: string;
 }
 
-export interface GetTollgateResponse {
+export interface QueryOneResponse {
   tollgate: Tollgate | undefined;
 }
 
-export interface GetTollgatesRequest {
-  limit: string;
+export interface QueryAllRequest {
+  limit: number;
 }
 
-export interface GetTollgatesResponse {
+export interface QueryAllResponse {
   tollgates: Tollgate[];
 }
 
 export interface Tollgate {
   id: string;
   name: string;
-  bBox: BBox | undefined;
-  lineGate: LineGate | undefined;
-  createdTime: Date | undefined;
-  updatedTime: Date | undefined;
+  bBoxes: BBoxes | undefined;
+  gateLine: GateLine | undefined;
+  created: Date | undefined;
+  updated: Date | undefined;
 }
 
 export interface BBoxes {
-  bBoxes: BBox | undefined;
+  bBoxes: BBox[];
   required: number;
 }
 
@@ -42,20 +42,20 @@ export interface BBox {
   latMax: number;
 }
 
-export interface LineGate {
+export interface GateLine {
   lon1: number;
   lat1: number;
   lon2: number;
   lat2: number;
 }
 
-function createBaseGetTollgateRequest(): GetTollgateRequest {
+function createBaseQueryOneRequest(): QueryOneRequest {
   return { tollgateId: "" };
 }
 
-export const GetTollgateRequest = {
+export const QueryOneRequest = {
   encode(
-    message: GetTollgateRequest,
+    message: QueryOneRequest,
     writer: _m0.Writer = _m0.Writer.create()
   ): _m0.Writer {
     if (message.tollgateId !== "") {
@@ -64,10 +64,10 @@ export const GetTollgateRequest = {
     return writer;
   },
 
-  decode(input: _m0.Reader | Uint8Array, length?: number): GetTollgateRequest {
+  decode(input: _m0.Reader | Uint8Array, length?: number): QueryOneRequest {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseGetTollgateRequest();
+    const message = createBaseQueryOneRequest();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -82,32 +82,32 @@ export const GetTollgateRequest = {
     return message;
   },
 
-  fromJSON(object: any): GetTollgateRequest {
+  fromJSON(object: any): QueryOneRequest {
     return {
       tollgateId: isSet(object.tollgateId) ? String(object.tollgateId) : "",
     };
   },
 
-  toJSON(message: GetTollgateRequest): unknown {
+  toJSON(message: QueryOneRequest): unknown {
     const obj: any = {};
     message.tollgateId !== undefined && (obj.tollgateId = message.tollgateId);
     return obj;
   },
 
-  fromPartial(object: DeepPartial<GetTollgateRequest>): GetTollgateRequest {
-    const message = createBaseGetTollgateRequest();
+  fromPartial(object: DeepPartial<QueryOneRequest>): QueryOneRequest {
+    const message = createBaseQueryOneRequest();
     message.tollgateId = object.tollgateId ?? "";
     return message;
   },
 };
 
-function createBaseGetTollgateResponse(): GetTollgateResponse {
+function createBaseQueryOneResponse(): QueryOneResponse {
   return { tollgate: undefined };
 }
 
-export const GetTollgateResponse = {
+export const QueryOneResponse = {
   encode(
-    message: GetTollgateResponse,
+    message: QueryOneResponse,
     writer: _m0.Writer = _m0.Writer.create()
   ): _m0.Writer {
     if (message.tollgate !== undefined) {
@@ -116,10 +116,10 @@ export const GetTollgateResponse = {
     return writer;
   },
 
-  decode(input: _m0.Reader | Uint8Array, length?: number): GetTollgateResponse {
+  decode(input: _m0.Reader | Uint8Array, length?: number): QueryOneResponse {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseGetTollgateResponse();
+    const message = createBaseQueryOneResponse();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -134,7 +134,7 @@ export const GetTollgateResponse = {
     return message;
   },
 
-  fromJSON(object: any): GetTollgateResponse {
+  fromJSON(object: any): QueryOneResponse {
     return {
       tollgate: isSet(object.tollgate)
         ? Tollgate.fromJSON(object.tollgate)
@@ -142,7 +142,7 @@ export const GetTollgateResponse = {
     };
   },
 
-  toJSON(message: GetTollgateResponse): unknown {
+  toJSON(message: QueryOneResponse): unknown {
     const obj: any = {};
     message.tollgate !== undefined &&
       (obj.tollgate = message.tollgate
@@ -151,8 +151,8 @@ export const GetTollgateResponse = {
     return obj;
   },
 
-  fromPartial(object: DeepPartial<GetTollgateResponse>): GetTollgateResponse {
-    const message = createBaseGetTollgateResponse();
+  fromPartial(object: DeepPartial<QueryOneResponse>): QueryOneResponse {
+    const message = createBaseQueryOneResponse();
     message.tollgate =
       object.tollgate !== undefined && object.tollgate !== null
         ? Tollgate.fromPartial(object.tollgate)
@@ -161,30 +161,30 @@ export const GetTollgateResponse = {
   },
 };
 
-function createBaseGetTollgatesRequest(): GetTollgatesRequest {
-  return { limit: "" };
+function createBaseQueryAllRequest(): QueryAllRequest {
+  return { limit: 0 };
 }
 
-export const GetTollgatesRequest = {
+export const QueryAllRequest = {
   encode(
-    message: GetTollgatesRequest,
+    message: QueryAllRequest,
     writer: _m0.Writer = _m0.Writer.create()
   ): _m0.Writer {
-    if (message.limit !== "") {
-      writer.uint32(10).string(message.limit);
+    if (message.limit !== 0) {
+      writer.uint32(8).int32(message.limit);
     }
     return writer;
   },
 
-  decode(input: _m0.Reader | Uint8Array, length?: number): GetTollgatesRequest {
+  decode(input: _m0.Reader | Uint8Array, length?: number): QueryAllRequest {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseGetTollgatesRequest();
+    const message = createBaseQueryAllRequest();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.limit = reader.string();
+          message.limit = reader.int32();
           break;
         default:
           reader.skipType(tag & 7);
@@ -194,32 +194,32 @@ export const GetTollgatesRequest = {
     return message;
   },
 
-  fromJSON(object: any): GetTollgatesRequest {
+  fromJSON(object: any): QueryAllRequest {
     return {
-      limit: isSet(object.limit) ? String(object.limit) : "",
+      limit: isSet(object.limit) ? Number(object.limit) : 0,
     };
   },
 
-  toJSON(message: GetTollgatesRequest): unknown {
+  toJSON(message: QueryAllRequest): unknown {
     const obj: any = {};
-    message.limit !== undefined && (obj.limit = message.limit);
+    message.limit !== undefined && (obj.limit = Math.round(message.limit));
     return obj;
   },
 
-  fromPartial(object: DeepPartial<GetTollgatesRequest>): GetTollgatesRequest {
-    const message = createBaseGetTollgatesRequest();
-    message.limit = object.limit ?? "";
+  fromPartial(object: DeepPartial<QueryAllRequest>): QueryAllRequest {
+    const message = createBaseQueryAllRequest();
+    message.limit = object.limit ?? 0;
     return message;
   },
 };
 
-function createBaseGetTollgatesResponse(): GetTollgatesResponse {
+function createBaseQueryAllResponse(): QueryAllResponse {
   return { tollgates: [] };
 }
 
-export const GetTollgatesResponse = {
+export const QueryAllResponse = {
   encode(
-    message: GetTollgatesResponse,
+    message: QueryAllResponse,
     writer: _m0.Writer = _m0.Writer.create()
   ): _m0.Writer {
     for (const v of message.tollgates) {
@@ -228,13 +228,10 @@ export const GetTollgatesResponse = {
     return writer;
   },
 
-  decode(
-    input: _m0.Reader | Uint8Array,
-    length?: number
-  ): GetTollgatesResponse {
+  decode(input: _m0.Reader | Uint8Array, length?: number): QueryAllResponse {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseGetTollgatesResponse();
+    const message = createBaseQueryAllResponse();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -249,7 +246,7 @@ export const GetTollgatesResponse = {
     return message;
   },
 
-  fromJSON(object: any): GetTollgatesResponse {
+  fromJSON(object: any): QueryAllResponse {
     return {
       tollgates: Array.isArray(object?.tollgates)
         ? object.tollgates.map((e: any) => Tollgate.fromJSON(e))
@@ -257,7 +254,7 @@ export const GetTollgatesResponse = {
     };
   },
 
-  toJSON(message: GetTollgatesResponse): unknown {
+  toJSON(message: QueryAllResponse): unknown {
     const obj: any = {};
     if (message.tollgates) {
       obj.tollgates = message.tollgates.map((e) =>
@@ -269,8 +266,8 @@ export const GetTollgatesResponse = {
     return obj;
   },
 
-  fromPartial(object: DeepPartial<GetTollgatesResponse>): GetTollgatesResponse {
-    const message = createBaseGetTollgatesResponse();
+  fromPartial(object: DeepPartial<QueryAllResponse>): QueryAllResponse {
+    const message = createBaseQueryAllResponse();
     message.tollgates =
       object.tollgates?.map((e) => Tollgate.fromPartial(e)) || [];
     return message;
@@ -281,10 +278,10 @@ function createBaseTollgate(): Tollgate {
   return {
     id: "",
     name: "",
-    bBox: undefined,
-    lineGate: undefined,
-    createdTime: undefined,
-    updatedTime: undefined,
+    bBoxes: undefined,
+    gateLine: undefined,
+    created: undefined,
+    updated: undefined,
   };
 }
 
@@ -299,21 +296,21 @@ export const Tollgate = {
     if (message.name !== "") {
       writer.uint32(18).string(message.name);
     }
-    if (message.bBox !== undefined) {
-      BBox.encode(message.bBox, writer.uint32(26).fork()).ldelim();
+    if (message.bBoxes !== undefined) {
+      BBoxes.encode(message.bBoxes, writer.uint32(26).fork()).ldelim();
     }
-    if (message.lineGate !== undefined) {
-      LineGate.encode(message.lineGate, writer.uint32(34).fork()).ldelim();
+    if (message.gateLine !== undefined) {
+      GateLine.encode(message.gateLine, writer.uint32(34).fork()).ldelim();
     }
-    if (message.createdTime !== undefined) {
+    if (message.created !== undefined) {
       Timestamp.encode(
-        toTimestamp(message.createdTime),
+        toTimestamp(message.created),
         writer.uint32(42).fork()
       ).ldelim();
     }
-    if (message.updatedTime !== undefined) {
+    if (message.updated !== undefined) {
       Timestamp.encode(
-        toTimestamp(message.updatedTime),
+        toTimestamp(message.updated),
         writer.uint32(50).fork()
       ).ldelim();
     }
@@ -334,18 +331,18 @@ export const Tollgate = {
           message.name = reader.string();
           break;
         case 3:
-          message.bBox = BBox.decode(reader, reader.uint32());
+          message.bBoxes = BBoxes.decode(reader, reader.uint32());
           break;
         case 4:
-          message.lineGate = LineGate.decode(reader, reader.uint32());
+          message.gateLine = GateLine.decode(reader, reader.uint32());
           break;
         case 5:
-          message.createdTime = fromTimestamp(
+          message.created = fromTimestamp(
             Timestamp.decode(reader, reader.uint32())
           );
           break;
         case 6:
-          message.updatedTime = fromTimestamp(
+          message.updated = fromTimestamp(
             Timestamp.decode(reader, reader.uint32())
           );
           break;
@@ -361,15 +358,15 @@ export const Tollgate = {
     return {
       id: isSet(object.id) ? String(object.id) : "",
       name: isSet(object.name) ? String(object.name) : "",
-      bBox: isSet(object.bBox) ? BBox.fromJSON(object.bBox) : undefined,
-      lineGate: isSet(object.lineGate)
-        ? LineGate.fromJSON(object.lineGate)
+      bBoxes: isSet(object.bBoxes) ? BBoxes.fromJSON(object.bBoxes) : undefined,
+      gateLine: isSet(object.gateLine)
+        ? GateLine.fromJSON(object.gateLine)
         : undefined,
-      createdTime: isSet(object.createdTime)
-        ? fromJsonTimestamp(object.createdTime)
+      created: isSet(object.created)
+        ? fromJsonTimestamp(object.created)
         : undefined,
-      updatedTime: isSet(object.updatedTime)
-        ? fromJsonTimestamp(object.updatedTime)
+      updated: isSet(object.updated)
+        ? fromJsonTimestamp(object.updated)
         : undefined,
     };
   },
@@ -378,16 +375,16 @@ export const Tollgate = {
     const obj: any = {};
     message.id !== undefined && (obj.id = message.id);
     message.name !== undefined && (obj.name = message.name);
-    message.bBox !== undefined &&
-      (obj.bBox = message.bBox ? BBox.toJSON(message.bBox) : undefined);
-    message.lineGate !== undefined &&
-      (obj.lineGate = message.lineGate
-        ? LineGate.toJSON(message.lineGate)
+    message.bBoxes !== undefined &&
+      (obj.bBoxes = message.bBoxes ? BBoxes.toJSON(message.bBoxes) : undefined);
+    message.gateLine !== undefined &&
+      (obj.gateLine = message.gateLine
+        ? GateLine.toJSON(message.gateLine)
         : undefined);
-    message.createdTime !== undefined &&
-      (obj.createdTime = message.createdTime.toISOString());
-    message.updatedTime !== undefined &&
-      (obj.updatedTime = message.updatedTime.toISOString());
+    message.created !== undefined &&
+      (obj.created = message.created.toISOString());
+    message.updated !== undefined &&
+      (obj.updated = message.updated.toISOString());
     return obj;
   },
 
@@ -395,22 +392,22 @@ export const Tollgate = {
     const message = createBaseTollgate();
     message.id = object.id ?? "";
     message.name = object.name ?? "";
-    message.bBox =
-      object.bBox !== undefined && object.bBox !== null
-        ? BBox.fromPartial(object.bBox)
+    message.bBoxes =
+      object.bBoxes !== undefined && object.bBoxes !== null
+        ? BBoxes.fromPartial(object.bBoxes)
         : undefined;
-    message.lineGate =
-      object.lineGate !== undefined && object.lineGate !== null
-        ? LineGate.fromPartial(object.lineGate)
+    message.gateLine =
+      object.gateLine !== undefined && object.gateLine !== null
+        ? GateLine.fromPartial(object.gateLine)
         : undefined;
-    message.createdTime = object.createdTime ?? undefined;
-    message.updatedTime = object.updatedTime ?? undefined;
+    message.created = object.created ?? undefined;
+    message.updated = object.updated ?? undefined;
     return message;
   },
 };
 
 function createBaseBBoxes(): BBoxes {
-  return { bBoxes: undefined, required: 0 };
+  return { bBoxes: [], required: 0 };
 }
 
 export const BBoxes = {
@@ -418,8 +415,8 @@ export const BBoxes = {
     message: BBoxes,
     writer: _m0.Writer = _m0.Writer.create()
   ): _m0.Writer {
-    if (message.bBoxes !== undefined) {
-      BBox.encode(message.bBoxes, writer.uint32(10).fork()).ldelim();
+    for (const v of message.bBoxes) {
+      BBox.encode(v!, writer.uint32(10).fork()).ldelim();
     }
     if (message.required !== 0) {
       writer.uint32(16).int32(message.required);
@@ -435,7 +432,7 @@ export const BBoxes = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.bBoxes = BBox.decode(reader, reader.uint32());
+          message.bBoxes.push(BBox.decode(reader, reader.uint32()));
           break;
         case 2:
           message.required = reader.int32();
@@ -450,15 +447,20 @@ export const BBoxes = {
 
   fromJSON(object: any): BBoxes {
     return {
-      bBoxes: isSet(object.bBoxes) ? BBox.fromJSON(object.bBoxes) : undefined,
+      bBoxes: Array.isArray(object?.bBoxes)
+        ? object.bBoxes.map((e: any) => BBox.fromJSON(e))
+        : [],
       required: isSet(object.required) ? Number(object.required) : 0,
     };
   },
 
   toJSON(message: BBoxes): unknown {
     const obj: any = {};
-    message.bBoxes !== undefined &&
-      (obj.bBoxes = message.bBoxes ? BBox.toJSON(message.bBoxes) : undefined);
+    if (message.bBoxes) {
+      obj.bBoxes = message.bBoxes.map((e) => (e ? BBox.toJSON(e) : undefined));
+    } else {
+      obj.bBoxes = [];
+    }
     message.required !== undefined &&
       (obj.required = Math.round(message.required));
     return obj;
@@ -466,10 +468,7 @@ export const BBoxes = {
 
   fromPartial(object: DeepPartial<BBoxes>): BBoxes {
     const message = createBaseBBoxes();
-    message.bBoxes =
-      object.bBoxes !== undefined && object.bBoxes !== null
-        ? BBox.fromPartial(object.bBoxes)
-        : undefined;
+    message.bBoxes = object.bBoxes?.map((e) => BBox.fromPartial(e)) || [];
     message.required = object.required ?? 0;
     return message;
   },
@@ -551,13 +550,13 @@ export const BBox = {
   },
 };
 
-function createBaseLineGate(): LineGate {
+function createBaseGateLine(): GateLine {
   return { lon1: 0, lat1: 0, lon2: 0, lat2: 0 };
 }
 
-export const LineGate = {
+export const GateLine = {
   encode(
-    message: LineGate,
+    message: GateLine,
     writer: _m0.Writer = _m0.Writer.create()
   ): _m0.Writer {
     if (message.lon1 !== 0) {
@@ -575,10 +574,10 @@ export const LineGate = {
     return writer;
   },
 
-  decode(input: _m0.Reader | Uint8Array, length?: number): LineGate {
+  decode(input: _m0.Reader | Uint8Array, length?: number): GateLine {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseLineGate();
+    const message = createBaseGateLine();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -602,7 +601,7 @@ export const LineGate = {
     return message;
   },
 
-  fromJSON(object: any): LineGate {
+  fromJSON(object: any): GateLine {
     return {
       lon1: isSet(object.lon1) ? Number(object.lon1) : 0,
       lat1: isSet(object.lat1) ? Number(object.lat1) : 0,
@@ -611,7 +610,7 @@ export const LineGate = {
     };
   },
 
-  toJSON(message: LineGate): unknown {
+  toJSON(message: GateLine): unknown {
     const obj: any = {};
     message.lon1 !== undefined && (obj.lon1 = message.lon1);
     message.lat1 !== undefined && (obj.lat1 = message.lat1);
@@ -620,8 +619,8 @@ export const LineGate = {
     return obj;
   },
 
-  fromPartial(object: DeepPartial<LineGate>): LineGate {
-    const message = createBaseLineGate();
+  fromPartial(object: DeepPartial<GateLine>): GateLine {
+    const message = createBaseGateLine();
     message.lon1 = object.lon1 ?? 0;
     message.lat1 = object.lat1 ?? 0;
     message.lon2 = object.lon2 ?? 0;
@@ -634,19 +633,19 @@ export const TollgateServiceDefinition = {
   name: "TollgateService",
   fullName: "omeapi.tollgate.v1beta1.TollgateService",
   methods: {
-    getTollgate: {
-      name: "GetTollgate",
-      requestType: GetTollgateRequest,
+    queryOne: {
+      name: "QueryOne",
+      requestType: QueryOneRequest,
       requestStream: false,
-      responseType: GetTollgateResponse,
+      responseType: QueryOneResponse,
       responseStream: false,
       options: {},
     },
-    getTollgates: {
-      name: "GetTollgates",
-      requestType: GetTollgatesRequest,
+    queryAll: {
+      name: "QueryAll",
+      requestType: QueryAllRequest,
       requestStream: false,
-      responseType: GetTollgatesResponse,
+      responseType: QueryAllResponse,
       responseStream: false,
       options: {},
     },

@@ -28,7 +28,7 @@ export interface TollgateCrossing {
   direction: string;
   alg: string;
   movement: Movement | undefined;
-  createdTime: Date | undefined;
+  created: Date | undefined;
 }
 
 function createBaseQueryTollgateCrossingsRequest(): QueryTollgateCrossingsRequest {
@@ -252,7 +252,7 @@ function createBaseTollgateCrossing(): TollgateCrossing {
     direction: "",
     alg: "",
     movement: undefined,
-    createdTime: undefined,
+    created: undefined,
   };
 }
 
@@ -279,9 +279,9 @@ export const TollgateCrossing = {
     if (message.movement !== undefined) {
       Movement.encode(message.movement, writer.uint32(50).fork()).ldelim();
     }
-    if (message.createdTime !== undefined) {
+    if (message.created !== undefined) {
       Timestamp.encode(
-        toTimestamp(message.createdTime),
+        toTimestamp(message.created),
         writer.uint32(58).fork()
       ).ldelim();
     }
@@ -314,7 +314,7 @@ export const TollgateCrossing = {
           message.movement = Movement.decode(reader, reader.uint32());
           break;
         case 7:
-          message.createdTime = fromTimestamp(
+          message.created = fromTimestamp(
             Timestamp.decode(reader, reader.uint32())
           );
           break;
@@ -336,8 +336,8 @@ export const TollgateCrossing = {
       movement: isSet(object.movement)
         ? Movement.fromJSON(object.movement)
         : undefined,
-      createdTime: isSet(object.createdTime)
-        ? fromJsonTimestamp(object.createdTime)
+      created: isSet(object.created)
+        ? fromJsonTimestamp(object.created)
         : undefined,
     };
   },
@@ -353,8 +353,8 @@ export const TollgateCrossing = {
       (obj.movement = message.movement
         ? Movement.toJSON(message.movement)
         : undefined);
-    message.createdTime !== undefined &&
-      (obj.createdTime = message.createdTime.toISOString());
+    message.created !== undefined &&
+      (obj.created = message.created.toISOString());
     return obj;
   },
 
@@ -369,7 +369,7 @@ export const TollgateCrossing = {
       object.movement !== undefined && object.movement !== null
         ? Movement.fromPartial(object.movement)
         : undefined;
-    message.createdTime = object.createdTime ?? undefined;
+    message.created = object.created ?? undefined;
     return message;
   },
 };
