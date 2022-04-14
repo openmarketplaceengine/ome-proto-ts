@@ -20,9 +20,13 @@ export interface Movement {
 }
 
 export interface TollgateCrossing {
+  id: string;
   tollgateId: string;
-  movement: Movement | undefined;
+  workerId: string;
   direction: string;
+  alg: string;
+  movement: Movement | undefined;
+  created: Date | undefined;
 }
 
 export interface UpdateLocationResponse {
@@ -214,7 +218,15 @@ export const Movement = {
 };
 
 function createBaseTollgateCrossing(): TollgateCrossing {
-  return { tollgateId: "", movement: undefined, direction: "" };
+  return {
+    id: "",
+    tollgateId: "",
+    workerId: "",
+    direction: "",
+    alg: "",
+    movement: undefined,
+    created: undefined,
+  };
 }
 
 export const TollgateCrossing = {
@@ -222,14 +234,29 @@ export const TollgateCrossing = {
     message: TollgateCrossing,
     writer: _m0.Writer = _m0.Writer.create()
   ): _m0.Writer {
-    if (message.tollgateId !== "") {
-      writer.uint32(10).string(message.tollgateId);
+    if (message.id !== "") {
+      writer.uint32(10).string(message.id);
     }
-    if (message.movement !== undefined) {
-      Movement.encode(message.movement, writer.uint32(18).fork()).ldelim();
+    if (message.tollgateId !== "") {
+      writer.uint32(18).string(message.tollgateId);
+    }
+    if (message.workerId !== "") {
+      writer.uint32(26).string(message.workerId);
     }
     if (message.direction !== "") {
-      writer.uint32(26).string(message.direction);
+      writer.uint32(34).string(message.direction);
+    }
+    if (message.alg !== "") {
+      writer.uint32(42).string(message.alg);
+    }
+    if (message.movement !== undefined) {
+      Movement.encode(message.movement, writer.uint32(50).fork()).ldelim();
+    }
+    if (message.created !== undefined) {
+      Timestamp.encode(
+        toTimestamp(message.created),
+        writer.uint32(58).fork()
+      ).ldelim();
     }
     return writer;
   },
@@ -242,13 +269,27 @@ export const TollgateCrossing = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.tollgateId = reader.string();
+          message.id = reader.string();
           break;
         case 2:
-          message.movement = Movement.decode(reader, reader.uint32());
+          message.tollgateId = reader.string();
           break;
         case 3:
+          message.workerId = reader.string();
+          break;
+        case 4:
           message.direction = reader.string();
+          break;
+        case 5:
+          message.alg = reader.string();
+          break;
+        case 6:
+          message.movement = Movement.decode(reader, reader.uint32());
+          break;
+        case 7:
+          message.created = fromTimestamp(
+            Timestamp.decode(reader, reader.uint32())
+          );
           break;
         default:
           reader.skipType(tag & 7);
@@ -260,33 +301,48 @@ export const TollgateCrossing = {
 
   fromJSON(object: any): TollgateCrossing {
     return {
+      id: isSet(object.id) ? String(object.id) : "",
       tollgateId: isSet(object.tollgateId) ? String(object.tollgateId) : "",
+      workerId: isSet(object.workerId) ? String(object.workerId) : "",
+      direction: isSet(object.direction) ? String(object.direction) : "",
+      alg: isSet(object.alg) ? String(object.alg) : "",
       movement: isSet(object.movement)
         ? Movement.fromJSON(object.movement)
         : undefined,
-      direction: isSet(object.direction) ? String(object.direction) : "",
+      created: isSet(object.created)
+        ? fromJsonTimestamp(object.created)
+        : undefined,
     };
   },
 
   toJSON(message: TollgateCrossing): unknown {
     const obj: any = {};
+    message.id !== undefined && (obj.id = message.id);
     message.tollgateId !== undefined && (obj.tollgateId = message.tollgateId);
+    message.workerId !== undefined && (obj.workerId = message.workerId);
+    message.direction !== undefined && (obj.direction = message.direction);
+    message.alg !== undefined && (obj.alg = message.alg);
     message.movement !== undefined &&
       (obj.movement = message.movement
         ? Movement.toJSON(message.movement)
         : undefined);
-    message.direction !== undefined && (obj.direction = message.direction);
+    message.created !== undefined &&
+      (obj.created = message.created.toISOString());
     return obj;
   },
 
   fromPartial(object: DeepPartial<TollgateCrossing>): TollgateCrossing {
     const message = createBaseTollgateCrossing();
+    message.id = object.id ?? "";
     message.tollgateId = object.tollgateId ?? "";
+    message.workerId = object.workerId ?? "";
+    message.direction = object.direction ?? "";
+    message.alg = object.alg ?? "";
     message.movement =
       object.movement !== undefined && object.movement !== null
         ? Movement.fromPartial(object.movement)
         : undefined;
-    message.direction = object.direction ?? "";
+    message.created = object.created ?? undefined;
     return message;
   },
 };
