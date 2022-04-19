@@ -9,7 +9,7 @@ export interface UpdateLocationRequest {
   workerId: string;
   lon: number;
   lat: number;
-  updateTime: Date | undefined;
+  timestamp: Date | undefined;
 }
 
 export interface Movement {
@@ -32,7 +32,7 @@ export interface TollgateCrossing {
 export interface UpdateLocationResponse {
   workerId: string;
   tollgateCrossing: TollgateCrossing | undefined;
-  updateTime: Date | undefined;
+  timestamp: Date | undefined;
 }
 
 export interface QueryLocationRequest {
@@ -47,7 +47,7 @@ export interface QueryLocationResponse {
 }
 
 function createBaseUpdateLocationRequest(): UpdateLocationRequest {
-  return { workerId: "", lon: 0, lat: 0, updateTime: undefined };
+  return { workerId: "", lon: 0, lat: 0, timestamp: undefined };
 }
 
 export const UpdateLocationRequest = {
@@ -64,9 +64,9 @@ export const UpdateLocationRequest = {
     if (message.lat !== 0) {
       writer.uint32(25).double(message.lat);
     }
-    if (message.updateTime !== undefined) {
+    if (message.timestamp !== undefined) {
       Timestamp.encode(
-        toTimestamp(message.updateTime),
+        toTimestamp(message.timestamp),
         writer.uint32(34).fork()
       ).ldelim();
     }
@@ -93,7 +93,7 @@ export const UpdateLocationRequest = {
           message.lat = reader.double();
           break;
         case 4:
-          message.updateTime = fromTimestamp(
+          message.timestamp = fromTimestamp(
             Timestamp.decode(reader, reader.uint32())
           );
           break;
@@ -110,8 +110,8 @@ export const UpdateLocationRequest = {
       workerId: isSet(object.workerId) ? String(object.workerId) : "",
       lon: isSet(object.lon) ? Number(object.lon) : 0,
       lat: isSet(object.lat) ? Number(object.lat) : 0,
-      updateTime: isSet(object.updateTime)
-        ? fromJsonTimestamp(object.updateTime)
+      timestamp: isSet(object.timestamp)
+        ? fromJsonTimestamp(object.timestamp)
         : undefined,
     };
   },
@@ -121,8 +121,8 @@ export const UpdateLocationRequest = {
     message.workerId !== undefined && (obj.workerId = message.workerId);
     message.lon !== undefined && (obj.lon = message.lon);
     message.lat !== undefined && (obj.lat = message.lat);
-    message.updateTime !== undefined &&
-      (obj.updateTime = message.updateTime.toISOString());
+    message.timestamp !== undefined &&
+      (obj.timestamp = message.timestamp.toISOString());
     return obj;
   },
 
@@ -133,7 +133,7 @@ export const UpdateLocationRequest = {
     message.workerId = object.workerId ?? "";
     message.lon = object.lon ?? 0;
     message.lat = object.lat ?? 0;
-    message.updateTime = object.updateTime ?? undefined;
+    message.timestamp = object.timestamp ?? undefined;
     return message;
   },
 };
@@ -348,7 +348,7 @@ export const TollgateCrossing = {
 };
 
 function createBaseUpdateLocationResponse(): UpdateLocationResponse {
-  return { workerId: "", tollgateCrossing: undefined, updateTime: undefined };
+  return { workerId: "", tollgateCrossing: undefined, timestamp: undefined };
 }
 
 export const UpdateLocationResponse = {
@@ -365,9 +365,9 @@ export const UpdateLocationResponse = {
         writer.uint32(18).fork()
       ).ldelim();
     }
-    if (message.updateTime !== undefined) {
+    if (message.timestamp !== undefined) {
       Timestamp.encode(
-        toTimestamp(message.updateTime),
+        toTimestamp(message.timestamp),
         writer.uint32(26).fork()
       ).ldelim();
     }
@@ -394,7 +394,7 @@ export const UpdateLocationResponse = {
           );
           break;
         case 3:
-          message.updateTime = fromTimestamp(
+          message.timestamp = fromTimestamp(
             Timestamp.decode(reader, reader.uint32())
           );
           break;
@@ -412,8 +412,8 @@ export const UpdateLocationResponse = {
       tollgateCrossing: isSet(object.tollgateCrossing)
         ? TollgateCrossing.fromJSON(object.tollgateCrossing)
         : undefined,
-      updateTime: isSet(object.updateTime)
-        ? fromJsonTimestamp(object.updateTime)
+      timestamp: isSet(object.timestamp)
+        ? fromJsonTimestamp(object.timestamp)
         : undefined,
     };
   },
@@ -425,8 +425,8 @@ export const UpdateLocationResponse = {
       (obj.tollgateCrossing = message.tollgateCrossing
         ? TollgateCrossing.toJSON(message.tollgateCrossing)
         : undefined);
-    message.updateTime !== undefined &&
-      (obj.updateTime = message.updateTime.toISOString());
+    message.timestamp !== undefined &&
+      (obj.timestamp = message.timestamp.toISOString());
     return obj;
   },
 
@@ -439,7 +439,7 @@ export const UpdateLocationResponse = {
       object.tollgateCrossing !== undefined && object.tollgateCrossing !== null
         ? TollgateCrossing.fromPartial(object.tollgateCrossing)
         : undefined;
-    message.updateTime = object.updateTime ?? undefined;
+    message.timestamp = object.timestamp ?? undefined;
     return message;
   },
 };
