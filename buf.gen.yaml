@@ -1,10 +1,9 @@
 version: v1
 plugins:
-  - name: ts
+  - remote: buf.build/stephenh/plugins/ts-proto
     out: gen/ts
-    strategy: all
-    path: protoc-gen-ts_proto
     opt:
       - esModuleInterop=true
+      - outputServices=nice-grpc
       - outputServices=generic-definitions
       - useExactTypes=false
