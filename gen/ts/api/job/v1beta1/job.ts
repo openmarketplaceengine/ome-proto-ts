@@ -82,6 +82,33 @@ export interface ExportJobResponse {
   jobs: ExportJobItem[];
 }
 
+export interface GetAvailableJobsRequest {
+  /**
+   * Any non-empty string representing geographic region
+   * i.e. san-fran, new-york, alaska, us, global, test, etc.
+   * Should be used consistently across all APIs.
+   */
+  areaKey: string;
+  workerId: string;
+  rangeLimit: number;
+  limit: number;
+}
+
+export interface Distance {
+  fromLocation: Location | undefined;
+  unit: string;
+  range: number;
+}
+
+export interface AvailableJob {
+  job: JobInfo | undefined;
+  distance: Distance | undefined;
+}
+
+export interface GetAvailableJobsResponse {
+  jobs: AvailableJob[];
+}
+
 function createBaseJobInfo(): JobInfo {
   return {
     id: "",
@@ -579,6 +606,306 @@ export const ExportJobResponse = {
   },
 };
 
+function createBaseGetAvailableJobsRequest(): GetAvailableJobsRequest {
+  return { areaKey: "", workerId: "", rangeLimit: 0, limit: 0 };
+}
+
+export const GetAvailableJobsRequest = {
+  encode(
+    message: GetAvailableJobsRequest,
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
+    if (message.areaKey !== "") {
+      writer.uint32(10).string(message.areaKey);
+    }
+    if (message.workerId !== "") {
+      writer.uint32(18).string(message.workerId);
+    }
+    if (message.rangeLimit !== 0) {
+      writer.uint32(25).double(message.rangeLimit);
+    }
+    if (message.limit !== 0) {
+      writer.uint32(32).int32(message.limit);
+    }
+    return writer;
+  },
+
+  decode(
+    input: _m0.Reader | Uint8Array,
+    length?: number
+  ): GetAvailableJobsRequest {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseGetAvailableJobsRequest();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.areaKey = reader.string();
+          break;
+        case 2:
+          message.workerId = reader.string();
+          break;
+        case 3:
+          message.rangeLimit = reader.double();
+          break;
+        case 4:
+          message.limit = reader.int32();
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(object: any): GetAvailableJobsRequest {
+    return {
+      areaKey: isSet(object.areaKey) ? String(object.areaKey) : "",
+      workerId: isSet(object.workerId) ? String(object.workerId) : "",
+      rangeLimit: isSet(object.rangeLimit) ? Number(object.rangeLimit) : 0,
+      limit: isSet(object.limit) ? Number(object.limit) : 0,
+    };
+  },
+
+  toJSON(message: GetAvailableJobsRequest): unknown {
+    const obj: any = {};
+    message.areaKey !== undefined && (obj.areaKey = message.areaKey);
+    message.workerId !== undefined && (obj.workerId = message.workerId);
+    message.rangeLimit !== undefined && (obj.rangeLimit = message.rangeLimit);
+    message.limit !== undefined && (obj.limit = Math.round(message.limit));
+    return obj;
+  },
+
+  fromPartial(
+    object: DeepPartial<GetAvailableJobsRequest>
+  ): GetAvailableJobsRequest {
+    const message = createBaseGetAvailableJobsRequest();
+    message.areaKey = object.areaKey ?? "";
+    message.workerId = object.workerId ?? "";
+    message.rangeLimit = object.rangeLimit ?? 0;
+    message.limit = object.limit ?? 0;
+    return message;
+  },
+};
+
+function createBaseDistance(): Distance {
+  return { fromLocation: undefined, unit: "", range: 0 };
+}
+
+export const Distance = {
+  encode(
+    message: Distance,
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
+    if (message.fromLocation !== undefined) {
+      Location.encode(message.fromLocation, writer.uint32(10).fork()).ldelim();
+    }
+    if (message.unit !== "") {
+      writer.uint32(18).string(message.unit);
+    }
+    if (message.range !== 0) {
+      writer.uint32(29).float(message.range);
+    }
+    return writer;
+  },
+
+  decode(input: _m0.Reader | Uint8Array, length?: number): Distance {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseDistance();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.fromLocation = Location.decode(reader, reader.uint32());
+          break;
+        case 2:
+          message.unit = reader.string();
+          break;
+        case 3:
+          message.range = reader.float();
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(object: any): Distance {
+    return {
+      fromLocation: isSet(object.fromLocation)
+        ? Location.fromJSON(object.fromLocation)
+        : undefined,
+      unit: isSet(object.unit) ? String(object.unit) : "",
+      range: isSet(object.range) ? Number(object.range) : 0,
+    };
+  },
+
+  toJSON(message: Distance): unknown {
+    const obj: any = {};
+    message.fromLocation !== undefined &&
+      (obj.fromLocation = message.fromLocation
+        ? Location.toJSON(message.fromLocation)
+        : undefined);
+    message.unit !== undefined && (obj.unit = message.unit);
+    message.range !== undefined && (obj.range = message.range);
+    return obj;
+  },
+
+  fromPartial(object: DeepPartial<Distance>): Distance {
+    const message = createBaseDistance();
+    message.fromLocation =
+      object.fromLocation !== undefined && object.fromLocation !== null
+        ? Location.fromPartial(object.fromLocation)
+        : undefined;
+    message.unit = object.unit ?? "";
+    message.range = object.range ?? 0;
+    return message;
+  },
+};
+
+function createBaseAvailableJob(): AvailableJob {
+  return { job: undefined, distance: undefined };
+}
+
+export const AvailableJob = {
+  encode(
+    message: AvailableJob,
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
+    if (message.job !== undefined) {
+      JobInfo.encode(message.job, writer.uint32(10).fork()).ldelim();
+    }
+    if (message.distance !== undefined) {
+      Distance.encode(message.distance, writer.uint32(18).fork()).ldelim();
+    }
+    return writer;
+  },
+
+  decode(input: _m0.Reader | Uint8Array, length?: number): AvailableJob {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseAvailableJob();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.job = JobInfo.decode(reader, reader.uint32());
+          break;
+        case 2:
+          message.distance = Distance.decode(reader, reader.uint32());
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(object: any): AvailableJob {
+    return {
+      job: isSet(object.job) ? JobInfo.fromJSON(object.job) : undefined,
+      distance: isSet(object.distance)
+        ? Distance.fromJSON(object.distance)
+        : undefined,
+    };
+  },
+
+  toJSON(message: AvailableJob): unknown {
+    const obj: any = {};
+    message.job !== undefined &&
+      (obj.job = message.job ? JobInfo.toJSON(message.job) : undefined);
+    message.distance !== undefined &&
+      (obj.distance = message.distance
+        ? Distance.toJSON(message.distance)
+        : undefined);
+    return obj;
+  },
+
+  fromPartial(object: DeepPartial<AvailableJob>): AvailableJob {
+    const message = createBaseAvailableJob();
+    message.job =
+      object.job !== undefined && object.job !== null
+        ? JobInfo.fromPartial(object.job)
+        : undefined;
+    message.distance =
+      object.distance !== undefined && object.distance !== null
+        ? Distance.fromPartial(object.distance)
+        : undefined;
+    return message;
+  },
+};
+
+function createBaseGetAvailableJobsResponse(): GetAvailableJobsResponse {
+  return { jobs: [] };
+}
+
+export const GetAvailableJobsResponse = {
+  encode(
+    message: GetAvailableJobsResponse,
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
+    for (const v of message.jobs) {
+      AvailableJob.encode(v!, writer.uint32(10).fork()).ldelim();
+    }
+    return writer;
+  },
+
+  decode(
+    input: _m0.Reader | Uint8Array,
+    length?: number
+  ): GetAvailableJobsResponse {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseGetAvailableJobsResponse();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.jobs.push(AvailableJob.decode(reader, reader.uint32()));
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(object: any): GetAvailableJobsResponse {
+    return {
+      jobs: Array.isArray(object?.jobs)
+        ? object.jobs.map((e: any) => AvailableJob.fromJSON(e))
+        : [],
+    };
+  },
+
+  toJSON(message: GetAvailableJobsResponse): unknown {
+    const obj: any = {};
+    if (message.jobs) {
+      obj.jobs = message.jobs.map((e) =>
+        e ? AvailableJob.toJSON(e) : undefined
+      );
+    } else {
+      obj.jobs = [];
+    }
+    return obj;
+  },
+
+  fromPartial(
+    object: DeepPartial<GetAvailableJobsResponse>
+  ): GetAvailableJobsResponse {
+    const message = createBaseGetAvailableJobsResponse();
+    message.jobs = object.jobs?.map((e) => AvailableJob.fromPartial(e)) || [];
+    return message;
+  },
+};
+
 export type JobServiceDefinition = typeof JobServiceDefinition;
 export const JobServiceDefinition = {
   name: "JobService",
@@ -600,6 +927,14 @@ export const JobServiceDefinition = {
       responseStream: false,
       options: {},
     },
+    getAvailableJobs: {
+      name: "GetAvailableJobs",
+      requestType: GetAvailableJobsRequest,
+      requestStream: false,
+      responseType: GetAvailableJobsResponse,
+      responseStream: false,
+      options: {},
+    },
   },
 } as const;
 
@@ -612,6 +947,10 @@ export interface JobServiceServiceImplementation<CallContextExt = {}> {
     request: ExportJobRequest,
     context: CallContext & CallContextExt
   ): Promise<DeepPartial<ExportJobResponse>>;
+  getAvailableJobs(
+    request: GetAvailableJobsRequest,
+    context: CallContext & CallContextExt
+  ): Promise<DeepPartial<GetAvailableJobsResponse>>;
 }
 
 export interface JobServiceClient<CallOptionsExt = {}> {
@@ -623,6 +962,10 @@ export interface JobServiceClient<CallOptionsExt = {}> {
     request: DeepPartial<ExportJobRequest>,
     options?: CallOptions & CallOptionsExt
   ): Promise<ExportJobResponse>;
+  getAvailableJobs(
+    request: DeepPartial<GetAvailableJobsRequest>,
+    options?: CallOptions & CallOptionsExt
+  ): Promise<GetAvailableJobsResponse>;
 }
 
 type Builtin =
