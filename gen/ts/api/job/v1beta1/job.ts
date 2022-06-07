@@ -90,19 +90,15 @@ export interface GetAvailableJobsRequest {
    */
   areaKey: string;
   workerId: string;
-  rangeLimit: number;
+  /** Radius in meters to look for jobs relative to current worker position. */
+  radiusMeters: number;
+  /** Result set limit. */
   limit: number;
-}
-
-export interface Distance {
-  fromLocation: Location | undefined;
-  unit: string;
-  range: number;
 }
 
 export interface AvailableJob {
   job: JobInfo | undefined;
-  distance: Distance | undefined;
+  distanceMeters: number;
 }
 
 export interface GetAvailableJobsResponse {
@@ -607,7 +603,7 @@ export const ExportJobResponse = {
 };
 
 function createBaseGetAvailableJobsRequest(): GetAvailableJobsRequest {
-  return { areaKey: "", workerId: "", rangeLimit: 0, limit: 0 };
+  return { areaKey: "", workerId: "", radiusMeters: 0, limit: 0 };
 }
 
 export const GetAvailableJobsRequest = {
@@ -621,8 +617,8 @@ export const GetAvailableJobsRequest = {
     if (message.workerId !== "") {
       writer.uint32(18).string(message.workerId);
     }
-    if (message.rangeLimit !== 0) {
-      writer.uint32(25).double(message.rangeLimit);
+    if (message.radiusMeters !== 0) {
+      writer.uint32(24).int32(message.radiusMeters);
     }
     if (message.limit !== 0) {
       writer.uint32(32).int32(message.limit);
@@ -647,7 +643,7 @@ export const GetAvailableJobsRequest = {
           message.workerId = reader.string();
           break;
         case 3:
-          message.rangeLimit = reader.double();
+          message.radiusMeters = reader.int32();
           break;
         case 4:
           message.limit = reader.int32();
@@ -664,7 +660,9 @@ export const GetAvailableJobsRequest = {
     return {
       areaKey: isSet(object.areaKey) ? String(object.areaKey) : "",
       workerId: isSet(object.workerId) ? String(object.workerId) : "",
-      rangeLimit: isSet(object.rangeLimit) ? Number(object.rangeLimit) : 0,
+      radiusMeters: isSet(object.radiusMeters)
+        ? Number(object.radiusMeters)
+        : 0,
       limit: isSet(object.limit) ? Number(object.limit) : 0,
     };
   },
@@ -673,7 +671,8 @@ export const GetAvailableJobsRequest = {
     const obj: any = {};
     message.areaKey !== undefined && (obj.areaKey = message.areaKey);
     message.workerId !== undefined && (obj.workerId = message.workerId);
-    message.rangeLimit !== undefined && (obj.rangeLimit = message.rangeLimit);
+    message.radiusMeters !== undefined &&
+      (obj.radiusMeters = Math.round(message.radiusMeters));
     message.limit !== undefined && (obj.limit = Math.round(message.limit));
     return obj;
   },
@@ -684,92 +683,14 @@ export const GetAvailableJobsRequest = {
     const message = createBaseGetAvailableJobsRequest();
     message.areaKey = object.areaKey ?? "";
     message.workerId = object.workerId ?? "";
-    message.rangeLimit = object.rangeLimit ?? 0;
+    message.radiusMeters = object.radiusMeters ?? 0;
     message.limit = object.limit ?? 0;
     return message;
   },
 };
 
-function createBaseDistance(): Distance {
-  return { fromLocation: undefined, unit: "", range: 0 };
-}
-
-export const Distance = {
-  encode(
-    message: Distance,
-    writer: _m0.Writer = _m0.Writer.create()
-  ): _m0.Writer {
-    if (message.fromLocation !== undefined) {
-      Location.encode(message.fromLocation, writer.uint32(10).fork()).ldelim();
-    }
-    if (message.unit !== "") {
-      writer.uint32(18).string(message.unit);
-    }
-    if (message.range !== 0) {
-      writer.uint32(29).float(message.range);
-    }
-    return writer;
-  },
-
-  decode(input: _m0.Reader | Uint8Array, length?: number): Distance {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
-    let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseDistance();
-    while (reader.pos < end) {
-      const tag = reader.uint32();
-      switch (tag >>> 3) {
-        case 1:
-          message.fromLocation = Location.decode(reader, reader.uint32());
-          break;
-        case 2:
-          message.unit = reader.string();
-          break;
-        case 3:
-          message.range = reader.float();
-          break;
-        default:
-          reader.skipType(tag & 7);
-          break;
-      }
-    }
-    return message;
-  },
-
-  fromJSON(object: any): Distance {
-    return {
-      fromLocation: isSet(object.fromLocation)
-        ? Location.fromJSON(object.fromLocation)
-        : undefined,
-      unit: isSet(object.unit) ? String(object.unit) : "",
-      range: isSet(object.range) ? Number(object.range) : 0,
-    };
-  },
-
-  toJSON(message: Distance): unknown {
-    const obj: any = {};
-    message.fromLocation !== undefined &&
-      (obj.fromLocation = message.fromLocation
-        ? Location.toJSON(message.fromLocation)
-        : undefined);
-    message.unit !== undefined && (obj.unit = message.unit);
-    message.range !== undefined && (obj.range = message.range);
-    return obj;
-  },
-
-  fromPartial(object: DeepPartial<Distance>): Distance {
-    const message = createBaseDistance();
-    message.fromLocation =
-      object.fromLocation !== undefined && object.fromLocation !== null
-        ? Location.fromPartial(object.fromLocation)
-        : undefined;
-    message.unit = object.unit ?? "";
-    message.range = object.range ?? 0;
-    return message;
-  },
-};
-
 function createBaseAvailableJob(): AvailableJob {
-  return { job: undefined, distance: undefined };
+  return { job: undefined, distanceMeters: 0 };
 }
 
 export const AvailableJob = {
@@ -780,8 +701,8 @@ export const AvailableJob = {
     if (message.job !== undefined) {
       JobInfo.encode(message.job, writer.uint32(10).fork()).ldelim();
     }
-    if (message.distance !== undefined) {
-      Distance.encode(message.distance, writer.uint32(18).fork()).ldelim();
+    if (message.distanceMeters !== 0) {
+      writer.uint32(16).int32(message.distanceMeters);
     }
     return writer;
   },
@@ -797,7 +718,7 @@ export const AvailableJob = {
           message.job = JobInfo.decode(reader, reader.uint32());
           break;
         case 2:
-          message.distance = Distance.decode(reader, reader.uint32());
+          message.distanceMeters = reader.int32();
           break;
         default:
           reader.skipType(tag & 7);
@@ -810,9 +731,9 @@ export const AvailableJob = {
   fromJSON(object: any): AvailableJob {
     return {
       job: isSet(object.job) ? JobInfo.fromJSON(object.job) : undefined,
-      distance: isSet(object.distance)
-        ? Distance.fromJSON(object.distance)
-        : undefined,
+      distanceMeters: isSet(object.distanceMeters)
+        ? Number(object.distanceMeters)
+        : 0,
     };
   },
 
@@ -820,10 +741,8 @@ export const AvailableJob = {
     const obj: any = {};
     message.job !== undefined &&
       (obj.job = message.job ? JobInfo.toJSON(message.job) : undefined);
-    message.distance !== undefined &&
-      (obj.distance = message.distance
-        ? Distance.toJSON(message.distance)
-        : undefined);
+    message.distanceMeters !== undefined &&
+      (obj.distanceMeters = Math.round(message.distanceMeters));
     return obj;
   },
 
@@ -833,10 +752,7 @@ export const AvailableJob = {
       object.job !== undefined && object.job !== null
         ? JobInfo.fromPartial(object.job)
         : undefined;
-    message.distance =
-      object.distance !== undefined && object.distance !== null
-        ? Distance.fromPartial(object.distance)
-        : undefined;
+    message.distanceMeters = object.distanceMeters ?? 0;
     return message;
   },
 };
