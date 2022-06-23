@@ -1,8 +1,7 @@
 /* eslint-disable */
-import Long from "long";
-import * as _m0 from "protobufjs/minimal";
 import { Timestamp } from "../../../google/protobuf/timestamp";
 import { Movement } from "../../../api/type/v1beta1/movement";
+import * as _m0 from "protobufjs/minimal";
 
 export const protobufPackage = "api.type.v1beta1";
 
@@ -185,11 +184,6 @@ function fromJsonTimestamp(o: any): Date {
   } else {
     return fromTimestamp(Timestamp.fromJSON(o));
   }
-}
-
-if (_m0.util.Long !== Long) {
-  _m0.util.Long = Long as any;
-  _m0.configure();
 }
 
 function isSet(value: any): boolean {

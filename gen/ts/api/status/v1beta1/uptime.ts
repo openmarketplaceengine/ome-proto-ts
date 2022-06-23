@@ -1,8 +1,8 @@
 /* eslint-disable */
-import Long from "long";
-import * as _m0 from "protobufjs/minimal";
 import { CallContext, CallOptions } from "nice-grpc-common";
 import { Timestamp } from "../../../google/protobuf/timestamp";
+import Long from "long";
+import * as _m0 from "protobufjs/minimal";
 
 export const protobufPackage = "api.status.v1beta1";
 
