@@ -1,6 +1,6 @@
 /* eslint-disable */
-import { Timestamp } from "../../../google/protobuf/timestamp";
-import { Movement } from "../../../api/type/v1beta1/movement";
+import { Timestamp } from "../../../google/protobuf/timestamp.js";
+import { Movement } from "./movement.js";
 import * as _m0 from "protobufjs/minimal";
 
 export const protobufPackage = "api.type.v1beta1";

@@ -1,6 +1,6 @@
 /* eslint-disable */
-import { Timestamp } from "../../../google/protobuf/timestamp";
-import { Location } from "../../../api/type/v1beta1/location";
+import { Timestamp } from "../../../google/protobuf/timestamp.js";
+import { Location } from "../../type/v1beta1/location.js";
 import * as _m0 from "protobufjs/minimal";
 
 export const protobufPackage = "api.location.v1beta1";

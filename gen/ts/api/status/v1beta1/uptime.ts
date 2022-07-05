@@ -1,6 +1,6 @@
 /* eslint-disable */
 import { CallContext, CallOptions } from "nice-grpc-common";
-import { Timestamp } from "../../../google/protobuf/timestamp";
+import { Timestamp } from "../../../google/protobuf/timestamp.js";
 import Long from "long";
 import * as _m0 from "protobufjs/minimal";
 

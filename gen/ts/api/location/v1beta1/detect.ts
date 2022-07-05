@@ -1,7 +1,7 @@
 /* eslint-disable */
 import { CallContext, CallOptions } from "nice-grpc-common";
-import { LocationUpdate } from "../../../api/location/v1beta1/location_update";
-import { Crossing } from "../../../api/type/v1beta1/crossing";
+import { LocationUpdate } from "./location_update.js";
+import { Crossing } from "../../type/v1beta1/crossing.js";
 import * as _m0 from "protobufjs/minimal";
 
 export const protobufPackage = "api.location.v1beta1";

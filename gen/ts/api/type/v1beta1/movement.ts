@@ -1,5 +1,5 @@
 /* eslint-disable */
-import { Location } from "../../../api/type/v1beta1/location";
+import { Location } from "./location.js";
 import * as _m0 from "protobufjs/minimal";
 
 export const protobufPackage = "api.type.v1beta1";

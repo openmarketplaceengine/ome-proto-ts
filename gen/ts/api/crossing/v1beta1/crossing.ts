@@ -1,6 +1,6 @@
 /* eslint-disable */
 import { CallContext, CallOptions } from "nice-grpc-common";
-import { Crossing } from "../../../api/type/v1beta1/crossing";
+import { Crossing } from "../../type/v1beta1/crossing.js";
 import * as _m0 from "protobufjs/minimal";
 
 export const protobufPackage = "api.crossing.v1beta1";
